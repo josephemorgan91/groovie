@@ -1,0 +1,35 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="container">
+	<h1>Welcome <%= currentUser.username %>!</h1>
+	<h3>Here's a list of movies you've requested...</h3>
+	<div class="row">
+
+		<% user.requested_movies.forEach((movie) => { %>
+			<div class="card mb-3">
+				<div class="row no-gutters">
+
+					<div class="col-lg-4">
+						<img class="card-img" src="<%= movie.movie_poster %>" alt="Card image cap">
+					</div>
+
+					<div class="col-lg-8">
+						<div class="card-body">
+							<h5 class="card-title"><strong><%= movie.movie_title %></strong> - <%= movie.movie_release_date %></h5>
+							<hr>
+							<p class="card-text"><strong>Description: </strong><%= movie.movie_description %></p>
+							<p class="card-text"><strong>Movie Rating: </strong><%= movie.movie_rating%></p>
+							<form class="delete-button-form" action="/users/<%= currentUser._id %>/<%= movie.movie_id %>?_method=DELETE" method="post">
+								<button class="btn btn-danger">Delete</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% }); %>
+
+	</div>
+</div>
+
+
+<%- include('./partials/footer.ejs') %>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><%= title %></title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+			<div class="container">
+				<div class="navbar-nav mr-auto">
+					<a class="navbar-brand" href="/">Groovie</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<% if (currentUser) { %>
+							<li class="nav-item">
+								<a class="nav-link" href="/users/id/requests/new">New Request<span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/users/<%= currentUser._id %>/requests">See my Requests</a>
+							</li>
+						<% } %>
+					</ul>
+				</div>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ml-auto">
+						<% if(!currentUser) { %>
+							<li class="nav-item">
+								<a class="nav-link" href="/register">Register</a>
+							</li>
+						<% } else { %>
+							<li class="nav-item">
+								<a class="nav-link" href="">
+									Signed in as: <%= currentUser.username %>
+							</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="/logout">Logout</a>
+							</li>
+						<% } %>
+					</ul>
+				</div>
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+		</nav>

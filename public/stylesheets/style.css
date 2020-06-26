@@ -1,0 +1,19 @@
+a {
+  color: #00B7FF;
+}
+
+#login-form {
+	text-align: center;
+}
+
+.card {
+	margin-bottom: 1.5rem;
+}
+
+#search_box {
+	margin-bottom: .75rem;
+}
+
+#results {
+	visibility: hidden;
+}

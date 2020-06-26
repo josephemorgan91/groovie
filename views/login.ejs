@@ -1,0 +1,29 @@
+<%- include("./partials/header.ejs") %>
+
+<div class="container">
+	<h1 class="text-center"><%= title %></h1>
+	<p class="text-center">Welcome to Groovie - Please Log In</p>
+	<div class="row justify-content-center">
+		<div class="col-12 col-lg-4">
+			<% if (!currentUser) { %>
+				<form action="/login" method="post">
+					<div class="form-group">
+						<input class="form-control" type="text" name="username" placeholder="username">
+					</div>
+					<div class="form-group">
+						<input class="form-control" type="password" name="password" placeholder="password">
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary btn-block">Login</button>
+					</div>
+				</form>
+			<% } else { %>
+				<h3 class="text-center"> Welcome, <%= currentUser.username %>!</h3>
+				<a href="users/<%= currentUser._id %>/requests" class="btn btn-primary btn-block">See My Requests</a>
+				<a href="users/<%= currentUser._id %>/requests/new" class="btn btn-primary btn-block">New Request</a>
+			<% } %>
+		</div>
+	</div>
+</div>
+
+<%- include("./partials/footer.ejs") %>
