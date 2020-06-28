@@ -5,12 +5,12 @@ Groovie is a simple web application that allows a user to log in, search for mov
 ## Built With
 
 * [Express.js](https://expressjs.com/) - Node.js Web Framework
-* [MongoDB](mongodb.com) - NoSQL Database
-* [TMDB API](www.tmdb.com) - Used to populate search results
+* [MongoDB](https://mongodb.com) - NoSQL Database
+* [TMDB API](https://www.tmdb.com) - Used to populate search results
 
 ## Author
 
-* **Joseph Morgan** - [www.josephmorgan.net](www.josephmorgan.net)
+* **Joseph Morgan** - [www.josephmorgan.net](https://www.josephmorgan.net)
 
 ## License
 
