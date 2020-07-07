@@ -43,11 +43,11 @@ router.get('/logout', (req, res) => {
 
 // TODO: Add auth middleware
 router.get('/all_requests', (req, res) => {
-	User.find({}, (err, user) => {
+	User.find({}, (err, users) => {
 		if (err) {
 			flash("error", err);
 		} else {
-			res.render('all_requests.ejs');
+			res.render('all_requests.ejs', {title: "Groovie - Admin Overview", users: users});
 		}
 	})
 });
