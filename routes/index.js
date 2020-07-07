@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user.js");
+const middleware = require("../middleware/middleware.js");
 
 
 /* GET home page. */
@@ -31,13 +32,24 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', passport.authenticate("local", {
-}), (req, res) => {
-	res.redirect("/");
-});
+	successRedirect: "/login",
+	failureRedirect: "/login",
+	failureFlash: true }), (req, res) => {});
 
 router.get('/logout', (req, res) => {
 	req.logout();
 	res.redirect("/login");
-})
+});
+
+// TODO: Add auth middleware
+router.get('/all_requests', (req, res) => {
+	User.find({}, (err, users) => {
+		if (err) {
+			flash("error", err);
+		} else {
+			res.render('all_requests.ejs', {title: "Groovie - Admin Overview", users: users});
+		}
+	})
+});
 
 module.exports = router;

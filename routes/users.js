@@ -28,6 +28,8 @@ router.post('/:id/requests/new', (req, res) => {
 	User.findById(req.params.id, (err, user) => {
 		if (err) {
 			console.log(err);
+		} else if (!true) {
+			// TODO: Don't let user add movie that already exists
 		} else {
 			user.requested_movies.push({
 				movie_id: req.body.movie_id,

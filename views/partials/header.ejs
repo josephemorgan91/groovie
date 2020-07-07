@@ -17,12 +17,18 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
 						<% if (currentUser) { %>
-							<li class="nav-item">
-								<a class="nav-link" href="/users/id/requests/new">New Request<span class="sr-only">(current)</span></a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/users/<%= currentUser._id %>/requests">See my Requests</a>
-							</li>
+							<% if (currentUser.username === 'jemorgan'){ %>
+								<li class="nav-item">
+									<a class="nav-link" href="/all_requests">See All Requests</a>
+								</li>
+							<% } else { %>
+								<li class="nav-item">
+									<a class="nav-link" href="/users/id/requests/new">New Request<span class="sr-only">(current)</span></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="/users/<%= currentUser._id %>/requests">See my Requests</a>
+								</li>
+							<% } %>
 						<% } %>
 					</ul>
 				</div>
@@ -51,3 +57,8 @@
 				</button>
 			</div>
 		</nav>
+		<% if (error && error.length > 0) { %>
+			<div class="alert alert-danger" role="alert">
+				<%= error %>
+			</div>
+		<% }%>
