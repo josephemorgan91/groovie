@@ -67,7 +67,8 @@ for (let i = 0; i < 3; ++i) {
 		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.send(JSON.stringify(movieData[i]));
 
-		document.querySelector('#add_button_' + i).classList.remove('btn-primary');
-		document.querySelector('#add_button_' + i).classList.add('btn-success');
+		// This doesn't get undone when a new search is entered... TODO: Refactor search logic onto the server-side
+		// document.querySelector('#add_button_' + i).classList.remove('btn-primary');
+		// document.querySelector('#add_button_' + i).classList.add('btn-success');
 	});
 }
