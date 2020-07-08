@@ -31,10 +31,27 @@ router.get('/login', function(req, res, next) {
 	res.render('login.ejs', { title: 'Groovie - The Granny Movie Request Interface' });
 });
 
-router.post('/login', passport.authenticate("local", {
-	successRedirect: "/login",
-	failureRedirect: "/login",
-	failureFlash: true }), (req, res) => {});
+router.post('/login', (req, res, next) => {
+	passport.authenticate('local', (err, user, info) => {
+		if (err) {
+			req.flash("error", "Something went wrong.");
+			return next(err);
+		} else if (!user) {
+			req.flash("error", "Incorrect username or password");
+			return res.redirect('/login');
+		}
+		req.logIn(user, (err) => {
+			if (err) {
+				return next(err);
+			} else {
+				req.flash("success", "You've successfully logged in!");
+				return res.redirect('/login');
+			}
+		});
+		console.log("User IP: " + req.ip);
+	})
+	(req, res, next);
+});
 
 router.get('/logout', (req, res) => {
 	req.logout();
