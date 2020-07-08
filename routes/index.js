@@ -48,7 +48,17 @@ router.post('/login', (req, res, next) => {
 				return res.redirect('/login');
 			}
 		});
-		console.log("User IP: " + req.ip);
+		let filter = {username: user.username};
+		let update = {last_ip: req.ip};
+		console.log("Filter: " + JSON.stringify(filter));
+		console.log("Update: " + JSON.stringify(update));
+		User.findOneAndUpdate(filter, update, (err, updatedUser) => {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log(updatedUser);
+			}
+		});
 	})
 	(req, res, next);
 });
