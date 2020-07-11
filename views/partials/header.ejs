@@ -23,7 +23,7 @@
 								</li>
 							<% } else { %>
 								<li class="nav-item">
-									<a class="nav-link" href="/users/id/requests/new">New Request<span class="sr-only">(current)</span></a>
+									<a class="nav-link" href="/users/<%= currentUser._id %>/requests/new">New Request<span class="sr-only">(current)</span></a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="/users/<%= currentUser._id %>/requests">See my Requests</a>

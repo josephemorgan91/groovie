@@ -1,97 +1,52 @@
 <%- include("./partials/header.ejs") %>
 
 <div class="container">
-	<h1 class="text-center"> Create new Request for <em><strong><%= currentUser.username %></strong></em> </h1>
+	<h1 class="text-center"> Create new Request for <em><strong><%= currentUser.username %></strong> : <%= currentUser._id %></em> </h1>
 	<div class="row justify-content-center">
 		<div class="col-12 col-lg-4">
-			<input id="search_box" class="form-control" type="text" name="title" placeholder="Movie Title">
-			<button id="search_button" class="btn btn-primary btn-block">Search</a>
+			<form action="/users/search" method="POST">
+				<input id="search_box" class="form-control" type="text" name="title" placeholder="Movie Title">
+				<button id="search_button" class="btn btn-primary btn-block">Search</a>
+			</form>
 		</div>
 	</div>
 
-
-	<div id="results" class="row">
+	<% if (foundMovies[0] !== undefined ) { %>
 		<h3> Results... </h3>
+		<div class="row">
 
-		<div class="card mb-3">
-			<div class="row no-gutters">
+			<% foundMovies.forEach((movie) => { %>
 
-				<div class="col-lg-4">
-					<img id="poster_0" class="card-img" src="#" alt="Card image cap">
-				</div>
+				<div class="card mb-3">
+					<div class="row no-gutters">
 
-				<div class="col-lg-8">
-					<div class="card-body">
-						<h5 id="movie-title_0" class="card-title"><strong>Batman Begins</strong> - <em>1984</em></h5>
-						<p class="card-text"><strong>Description</strong>:
-						<span id="movie-description_0">
-						</span>
-						</p>
-						<p class="card-text"><strong>IMDB Rating</strong>:
-						<span id="movie-rating_0">
-						</span>
-						</p>
-						<a id="add_button_0" href="#" class="btn btn-primary">Add to Requests</a>
+						<div class="col-lg-4">
+							<img class="card-img" src="<%= movie.posterUrl %>" alt="Card image cap">
+						</div>
+
+						<div class="col-lg-8">
+							<div class="card-body">
+								<h5 class="card-title"><strong><%= movie.title %></strong> - <em><%= movie.date %></em></h5>
+								<p class="card-text"><strong>Description</strong>:
+								<%= movie.description %>
+								</p>
+								<p class="card-text"><strong>IMDB Rating</strong>:
+								<%= movie.rating %>
+								</p>
+								<btn id="<%= movie.id %>" href="#" class="btn btn-primary add-movie-button">Add to Requests</btn>
+							</div>
+						</div>
+
 					</div>
 				</div>
 
-			</div>
+			<% }) %>
+		<% } %>
+
+
 		</div>
-
-		<div class="card mb-3">
-			<div class="row no-gutters">
-
-				<div class="col-lg-4">
-					<img id="poster_1" class="card-img" src="#" alt="Card image cap">
-				</div>
-
-				<div class="col-lg-8">
-					<div class="card-body">
-						<h5 id="movie-title_1" class="card-title"><strong>Batman Begins</strong> - <em>1984</em></h5>
-						<p class="card-text"><strong>Description</strong>:
-						<span id="movie-description_1">
-						</span>
-						</p>
-						<p class="card-text"><strong>IMDB Rating</strong>:
-						<span id="movie-rating_1">
-						</span>
-						</p>
-						<a id="add_button_1" href="#" class="btn btn-primary">Add to Requests</a>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-		<div class="card mb-3">
-			<div class="row no-gutters">
-
-				<div class="col-lg-4">
-					<img id="poster_2" class="card-img" src="#" alt="Card image cap">
-				</div>
-
-				<div class="col-lg-8">
-					<div class="card-body">
-						<h5 id="movie-title_2" class="card-title"><strong>Batman Begins</strong> - <em>1984</em></h5>
-						<p class="card-text"><strong>Description</strong>:
-						<span id="movie-description_2">
-						</span>
-						</p>
-						<p class="card-text"><strong>IMDB Rating</strong>:
-						<span id="movie-rating_2">
-						</span>
-						</p>
-						<a id="add_button_2" href="#" class="btn btn-primary">Add to Requests</a>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-	</div>
 </div>
 
-<script src="/javascripts/apikey.js"></script>
-<script src="/javascripts/search.js" currentUserId=<%= currentUser._id %> currentUserName=<%= currentUser.username %>></script>
+	<script src="/javascripts/search.js" currentUserId=<%= currentUser._id %>></script>
 
 <%- include("./partials/footer.ejs") %>

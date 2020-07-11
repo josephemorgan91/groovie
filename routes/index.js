@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const passport = require("passport");
+const fetch = require("node-fetch");
+const flash = require("connect-flash");
 const User = require("../models/user.js");
 const middleware = require("../middleware/middleware.js");
-
 
 /* GET home page. */
 router.get('/', (req, res) => {
@@ -17,7 +18,7 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
 	User.register(new User({username: req.body.username}), req.body.password, (err, user) => {
 		if (err) {
-			console.log(err);
+			flash(err);
 			return res.redirect("back");
 		} else {
 			passport.authenticate("local") (req, res, () => {
@@ -45,18 +46,16 @@ router.post('/login', (req, res, next) => {
 				return next(err);
 			} else {
 				req.flash("success", "You've successfully logged in!");
-				return res.redirect('/login');
+				res.redirect("/");
 			}
 		});
+
+		// Log user IP
 		let filter = {username: user.username};
 		let update = {last_ip: req.ip};
-		console.log("Filter: " + JSON.stringify(filter));
-		console.log("Update: " + JSON.stringify(update));
 		User.findOneAndUpdate(filter, update, (err, updatedUser) => {
 			if (err) {
-				console.log(err);
-			} else {
-				console.log(updatedUser);
+				flash(err);
 			}
 		});
 	})

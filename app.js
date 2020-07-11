@@ -10,6 +10,7 @@ const LocalStrategy = require('passport-local');
 const methodOverride = require('method-override');
 const User = require("./models/user");
 const flash = require("connect-flash");
+const tmdb = require("./tmdb.js");
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
