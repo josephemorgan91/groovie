@@ -18,7 +18,7 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
 	User.register(new User({username: req.body.username}), req.body.password, (err, user) => {
 		if (err) {
-			flash(err);
+			req.flash(err);
 			return res.redirect("back");
 		} else {
 			passport.authenticate("local") (req, res, () => {
@@ -55,7 +55,7 @@ router.post('/login', (req, res, next) => {
 		let update = {last_ip: req.ip};
 		User.findOneAndUpdate(filter, update, (err, updatedUser) => {
 			if (err) {
-				flash(err);
+				req.flash(err);
 			}
 		});
 	})
@@ -71,7 +71,7 @@ router.get('/logout', (req, res) => {
 router.get('/all_requests', (req, res) => {
 	User.find({}, (err, users) => {
 		if (err) {
-			flash("error", err);
+			req.flash("error", err);
 		} else {
 			res.render('all_requests.ejs', {title: "Groovie - Admin Overview", users: users});
 		}

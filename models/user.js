@@ -14,6 +14,16 @@ const UserSchema = new mongoose.Schema({
 			movie_rating: String,
 			movie_poster: String
 		}
+	],
+	requested_tv_shows: [
+		{
+			tv_show_id: String,
+			tv_show_title: String,
+			tv_show_first_air_date: String,
+			tv_show_description: String,
+			tv_show_rating: String,
+			tv_show_poster: String
+		}
 	]
 });
 

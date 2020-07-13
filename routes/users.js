@@ -21,30 +21,45 @@ router.get('/:id/requests', (req, res) => {
 });
 
 router.get('/:id/requests/new', (req, res) => {
-	let foundMovies = [];
-	res.render('../views/new', {title: "New Request - Groovie", foundMovies: foundMovies});
+	let foundContent = [];
+	res.render('../views/new', {title: "New Request - Groovie", foundContent: foundContent});
 })
 
 router.post('/search', (req, res) => {
 	if (req.body.title && req.body.title.length > 0) {
-		tmdb.getMovieDataByKeyword(req.body.title).then(
-			(result) => {
-				res.render('../views/new', {title: "New Request - Groovie", foundMovies: tmdb.movieData})
-			},
-			(error) => {
-				flash("error", error);
-				res.redirect("back");
-			}
-		);
+		if (req.body.mode === '0') {
+			tmdb.getMovieDataByTitle(req.body.title).then(
+				(result) => {
+					res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData, mode: req.body.mode});
+				},
+				(error) => {
+					req.flash("error", error);
+					res.redirect("back");
+				}
+			);
+		} else if (req.body.mode === "1") {
+			console.log("Searching for: " + req.body.title)
+			tmdb.getTvShowDataByTitle(req.body.title).then(
+				(result) => {
+					console.log("Found " + req.body.title);
+					console.log(tmdb.contentData);
+					res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData, mode: req.body.mode});
+				},
+				(error) => {
+					console.log(error);
+					res.redirect("back");
+				}
+			)
+		}
 	} else {
-		flash("error", "Search failed");
-		res.render('../views/new', {title: "New Request - Groovie", foundMovies: tmdb.movieData})
+		req.flash("error", "Search failed");
+		res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData})
 	}
 })
 
 router.post('/:id/requests/new', (req, res) => {
 	let newMovie;
-	for (let movie of tmdb.movieData) {
+	for (let movie of tmdb.contentData) {
 		if (movie.id == req.body.movieId) {
 			User.updateOne({
 				_id: req.params.id
@@ -60,7 +75,7 @@ router.post('/:id/requests/new', (req, res) => {
 					}
 				}
 			}, (err, response) => {
-				});
+			});
 			break;
 		}
 	}

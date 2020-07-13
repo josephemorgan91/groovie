@@ -3,50 +3,95 @@
 <div class="container">
 	<h1 class="text-center"> Create new Request for <em><strong><%= currentUser.username %></strong> : <%= currentUser._id %></em> </h1>
 	<div class="row justify-content-center">
-		<div class="col-12 col-lg-4">
+		<div class="col-12 col-lg-6">
 			<form action="/users/search" method="POST">
-				<input id="search_box" class="form-control" type="text" name="title" placeholder="Movie Title">
-				<button id="search_button" class="btn btn-primary btn-block">Search</a>
-			</form>
-		</div>
-	</div>
-
-	<% if (foundMovies[0] !== undefined ) { %>
-		<h3> Results... </h3>
-		<div class="row">
-
-			<% foundMovies.forEach((movie) => { %>
-
-				<div class="card mb-3">
-					<div class="row no-gutters">
-
-						<div class="col-lg-4">
-							<img class="card-img" src="<%= movie.posterUrl %>" alt="Card image cap">
-						</div>
-
-						<div class="col-lg-8">
-							<div class="card-body">
-								<h5 class="card-title"><strong><%= movie.title %></strong> - <em><%= movie.date %></em></h5>
-								<p class="card-text"><strong>Description</strong>:
-								<%= movie.description %>
-								</p>
-								<p class="card-text"><strong>IMDB Rating</strong>:
-								<%= movie.rating %>
-								</p>
-								<btn id="<%= movie.id %>" href="#" class="btn btn-primary add-movie-button">Add to Requests</btn>
-							</div>
-						</div>
-
+				<div class="input-group">
+					<input id="search_box" class="form-control" type="text" name="title" placeholder="Movie or TV Show Title">
+				</div>
+				<div class="input-group">
+					<select class="custom-select" id="inputGroupSelect04" name="mode">
+						<option value="0" selected>Search Movies</option>
+						<option value="1">Search TV</option>
+					</select>
+					<div class="input-group-append">
+						<button id="search_button" class="btn btn-primary" type="submit">Search</button>
 					</div>
 				</div>
 
-			<% }) %>
-		<% } %>
-
-
+			</form>
 		</div>
-</div>
 
-	<script src="/javascripts/search.js" currentUserId=<%= currentUser._id %>></script>
+	</div>
 
-<%- include("./partials/footer.ejs") %>
+	<% if (foundContent !== undefined && foundContent[0] !== undefined ) { %>
+		<% if (mode === "0") { %>
+
+			<h3 class="text-center"> Results... </h3>
+			<div class="row">
+
+				<% foundContent.forEach((movie) => { %>
+
+					<div class="card mb-3">
+						<div class="row no-gutters">
+
+							<div class="col-lg-4">
+								<img class="card-img" src="<%= movie.posterUrl %>" alt="Card image cap">
+							</div>
+
+							<div class="col-lg-8">
+								<div class="card-body">
+									<h5 class="card-title"><strong><%= movie.title %></strong> - <em><%= movie.date %></em></h5>
+									<p class="card-text"><strong>Description</strong>:
+									<%= movie.description %>
+									</p>
+									<p class="card-text"><strong>IMDB Rating</strong>:
+									<%= movie.rating %>
+									</p>
+									<btn id="<%= movie.id %>" href="#" class="btn btn-primary add-movie-button">Add to Requests</btn>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				<% }) %>
+
+			<% } else if (mode === "1") { %>
+
+				<h3 class="text-center"> Results... </h3>
+				<div class="row">
+
+					<% foundContent.forEach((tvShow) => { %>
+
+						<div class="card mb-3">
+							<div class="row no-gutters">
+
+								<div class="col-lg-4">
+									<img class="card-img" src="<%= tvShow.posterUrl %>" alt="Card image cap">
+								</div>
+
+								<div class="col-lg-8">
+									<div class="card-body">
+										<h5 class="card-title"><strong><%= tvShow.title %></strong> - <em><%= tvShow.date %></em></h5>
+										<p class="card-text"><strong>Description</strong>:
+										<%= tvShow.description %>
+										</p>
+										<p class="card-text"><strong>IMDB Rating</strong>:
+										<%= tvShow.rating %>
+										</p>
+										<btn id="<%= tvShow.id %>" href="#" class="btn btn-primary add-tvShow-button">Add to Requests</btn>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					<% }) %>
+				<% } %>
+				</div>
+			<% } %>
+
+
+			</div>
+
+			<script src="/javascripts/search.js" currentUserId=<%= currentUser._id %>></script>
+
+			<%- include("./partials/footer.ejs") %>
