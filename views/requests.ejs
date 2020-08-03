@@ -1,8 +1,10 @@
 <%- include('./partials/header.ejs') %>
 
 <div class="container">
-	<h1>Welcome <%= currentUser.username %>!</h1>
-	<h3>Here's a list of movies you've requested...</h3>
+	<div class="requests-page-header">
+		<h1>Welcome <%= currentUser.username %>!</h1>
+		<h3>Here's the list of movies you've requested:</h3>
+	</div>
 	<div class="row">
 
 		<% user.requested_movies.forEach((movie) => { %>
@@ -19,7 +21,7 @@
 							<hr>
 							<p class="card-text"><strong>Description: </strong><%= movie.movie_description %></p>
 							<p class="card-text"><strong>Movie Rating: </strong><%= movie.movie_rating%></p>
-							<form class="delete-button-form" action="/users/<%= currentUser._id %>/<%= movie.movie_id %>?_method=DELETE" method="post">
+							<form class="delete-button-form" action="/users/<%= currentUser._id %>/movie/<%= movie.movie_id %>?_method=DELETE" method="post">
 								<button class="btn btn-danger">Delete</button>
 							</form>
 						</div>
@@ -28,6 +30,33 @@
 			</div>
 		<% }); %>
 
+		<% user.requested_tv_shows.forEach((tvShow) => { %>
+
+			<div class="card mb-3">
+				<div class="row no-gutters">
+
+					<div class="col-lg-4">
+						<img class="card-img" src="<%= tvShow.tv_show_poster %>" alt="Card image cap">
+					</div>
+
+					<div class="col-lg-8">
+						<div class="card-body">
+							<h5 class="card-title"><strong><%= tvShow.tv_show_title %></strong> - <em><%= tvShow.tv_show_date %></em></h5>
+							<p class="card-text"><strong>Description</strong>:
+							<%= tvShow.tv_show_description %>
+							</p>
+							<p class="card-text"><strong>IMDB Rating</strong>:
+							<%= tvShow.tv_show_rating %>
+							</p>
+							<form class="delete-button-form" action="/users/<%= currentUser._id %>/tvShow/<%= tvShow.tv_show_id%>?_method=DELETE" method="post">
+								<button class="btn btn-danger">Delete</button>
+							</form>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		<% }) %>
 	</div>
 </div>
 

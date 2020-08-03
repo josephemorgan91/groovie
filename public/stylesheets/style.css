@@ -18,3 +18,8 @@ a {
 #results {
 	visibility: hidden;
 }
+
+div .requests-page-header {
+	padding-top: 3rem;
+	text-align: center;
+}

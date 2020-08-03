@@ -30,7 +30,7 @@ router.post('/search', (req, res) => {
 		if (req.body.mode === '0') {
 			tmdb.getMovieDataByTitle(req.body.title).then(
 				(result) => {
-					res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData, mode: req.body.mode});
+					res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData, mode: req.body.mode, lastQuery: req.body.title});
 				},
 				(error) => {
 					req.flash("error", error);
@@ -38,12 +38,12 @@ router.post('/search', (req, res) => {
 				}
 			);
 		} else if (req.body.mode === "1") {
-			console.log("Searching for: " + req.body.title)
 			tmdb.getTvShowDataByTitle(req.body.title).then(
 				(result) => {
-					console.log("Found " + req.body.title);
-					console.log(tmdb.contentData);
-					res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData, mode: req.body.mode});
+					foundContent = tmdb.contentData;
+					foundContent.forEach((content) => {
+					});
+					res.render('../views/new', {title: "New Request - Groovie", foundContent: tmdb.contentData, mode: req.body.mode, lastQuery: req.body.title});
 				},
 				(error) => {
 					console.log(error);
@@ -58,39 +58,99 @@ router.post('/search', (req, res) => {
 })
 
 router.post('/:id/requests/new', (req, res) => {
-	let newMovie;
-	for (let movie of tmdb.contentData) {
-		if (movie.id == req.body.movieId) {
-			User.updateOne({
-				_id: req.params.id
-			}, {
-				$push: {
-					requested_movies : {
-						movie_id: movie.id,
-						movie_title: movie.title,
-						movie_release_date: movie.date,
-						movie_description: movie.description,
-						movie_rating: movie.rating,
-						movie_poster: movie.posterUrl
+	let alreadyExists = false;
+	// Check if content already exists in requests
+	if (req.body.mode === 0) {
+		User.findById(req.params.id, (err, user) => {
+			if (err) {
+				console.log(err);
+			} else {
+				user.requested_movies.forEach((movie) => {
+					if (movie.movie_id === req.body.movieId) {
+						alreadyExists = true;
+					}});
+				// if content is not already in requests, add it
+				if (!alreadyExists) {
+					for (let movie of tmdb.contentData) {
+						if (movie.id == req.body.movieId) {
+							User.updateOne({
+								_id: req.params.id
+							}, {
+								$push: {
+									requested_movies : {
+										movie_id: movie.id,
+										movie_title: movie.title,
+										movie_release_date: movie.date,
+										movie_description: movie.description,
+										movie_rating: movie.rating,
+										movie_poster: movie.posterUrl
+									}
+								}
+							}, (err, response) => {
+							});
+							break;
+						}
 					}
 				}
-			}, (err, response) => {
-			});
-			break;
+			}
+		});
+	} else if (req.body.mode === 1) {
+		// Check if content already exists in requests
+		User.findById(req.params.id, (err, user) => {
+			if (err) {
+				console.log(err);
+			} else {
+				user.requested_tv_shows.forEach((tvShow) => {
+					if (tvShow.tv_show_id === req.params.id) {
+						alreadyExists = true;
+					}});
+			}
+		});
+		// if content is not already in requests, add it
+		if (!alreadyExists) {
+			for (let tvShow of tmdb.contentData) {
+				if (tvShow.id == req.body.tvShowId) {
+					User.updateOne({
+						_id: req.params.id
+					}, {
+						$push: {
+							requested_tv_shows : {
+								tv_show_id: tvShow.id,
+								tv_show_title: tvShow.title,
+								tv_show_first_air_date: tvShow.date,
+								tv_show_description: tvShow.description,
+								tv_show_rating: tvShow.rating,
+								tv_show_poster:tvShow.posterUrl 
+							}
+						}
+					}, (err, response) => {
+					});
+					break;
+				}
+			}
 		}
 	}
 });
 
 
-router.delete('/:id/:movie_id', (req, res) => {
-	User.update({_id: req.params.id}, {"$pull" : {"requested_movies" : {"movie_id" : req.params.movie_id}}}, {safe: true}, (err, obj) => {
-		if (err) {
-			console.log(err);
-		} else {
-			res.redirect("back")
-		}
-
-	});
+router.delete('/:id/:type/:content_id', (req, res) => {
+	if (req.params.type === "movie") {
+		User.update({_id: req.params.id}, {"$pull" : {"requested_movies" : {"movie_id" : req.params.content_id}}}, {safe: true}, (err, obj) => {
+			if (err) {
+				console.log(err);
+			} else {
+				res.redirect("back")
+			}
+		});
+	} else if (req.params.type === "tvShow") {
+		User.update({_id: req.params.id}, {"$pull" : {"requested_tv_shows" : {"tv_show_id" : req.params.content_id}}}, {safe: true}, (err, obj) => {
+			if (err) {
+				console.log(err);
+			} else {
+				res.redirect("back")
+			}
+		});
+	}
 });
 
 

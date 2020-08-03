@@ -6,7 +6,11 @@
 		<div class="col-12 col-lg-6">
 			<form action="/users/search" method="POST">
 				<div class="input-group">
-					<input id="search_box" class="form-control" type="text" name="title" placeholder="Movie or TV Show Title">
+					<% if (typeof lastQuery !== 'undefined') { %>
+						<input id="search_box" class="form-control" type="text" name="title" value="<%= lastQuery %>" required>
+					<% } else { %>
+						<input id="search_box" class="form-control" type="text" name="title" placeholder="Movie or TV Show Title" required>
+					<% } %>
 				</div>
 				<div class="input-group">
 					<select class="custom-select" id="inputGroupSelect04" name="mode">
@@ -23,7 +27,7 @@
 
 	</div>
 
-	<% if (foundContent !== undefined && foundContent[0] !== undefined ) { %>
+	<% if (foundContent[0] !== undefined ) { %>
 		<% if (mode === "0") { %>
 
 			<h3 class="text-center"> Results... </h3>
@@ -54,44 +58,45 @@
 						</div>
 					</div>
 				<% }) %>
-
-			<% } else if (mode === "1") { %>
-
-				<h3 class="text-center"> Results... </h3>
-				<div class="row">
-
-					<% foundContent.forEach((tvShow) => { %>
-
-						<div class="card mb-3">
-							<div class="row no-gutters">
-
-								<div class="col-lg-4">
-									<img class="card-img" src="<%= tvShow.posterUrl %>" alt="Card image cap">
-								</div>
-
-								<div class="col-lg-8">
-									<div class="card-body">
-										<h5 class="card-title"><strong><%= tvShow.title %></strong> - <em><%= tvShow.date %></em></h5>
-										<p class="card-text"><strong>Description</strong>:
-										<%= tvShow.description %>
-										</p>
-										<p class="card-text"><strong>IMDB Rating</strong>:
-										<%= tvShow.rating %>
-										</p>
-										<btn id="<%= tvShow.id %>" href="#" class="btn btn-primary add-tvShow-button">Add to Requests</btn>
-									</div>
-								</div>
-
-							</div>
-						</div>
-					<% }) %>
-				<% } %>
-				</div>
-			<% } %>
-
-
 			</div>
 
-			<script src="/javascripts/search.js" currentUserId=<%= currentUser._id %>></script>
+		<% } else if (mode === "1") { %>
 
-			<%- include("./partials/footer.ejs") %>
+			<h3 class="text-center"> Results... </h3>
+			<div class="row">
+
+				<% foundContent.forEach((tvShow) => { %>
+
+					<div class="card mb-3">
+						<div class="row no-gutters">
+
+							<div class="col-lg-4">
+								<img class="card-img" src="<%= tvShow.posterUrl %>" alt="Card image cap">
+							</div>
+
+							<div class="col-lg-8">
+								<div class="card-body">
+									<h5 class="card-title"><strong><%= tvShow.title %></strong> - <em><%= tvShow.date %></em></h5>
+									<p class="card-text"><strong>Description</strong>:
+									<%= tvShow.description %>
+									</p>
+									<p class="card-text"><strong>IMDB Rating</strong>:
+									<%= tvShow.rating %>
+									</p>
+									<btn id="<%= tvShow.id %>" href="#" class="btn btn-primary add-tvShow-button">Add to Requests</btn>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				<% }) %>
+		<% } %>
+	</div>
+	<% } %>
+
+
+</div>
+
+<script src="/javascripts/search.js" currentUserId=<%= currentUser._id %>></script>
+
+<%- include("./partials/footer.ejs") %>
